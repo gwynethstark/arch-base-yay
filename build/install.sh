@@ -80,7 +80,7 @@ echo "[info] installing primary packages..."
 
 # installing go since it is a requirement for Yay
 # https://aur.archlinux.org/packages/yay/
-pacman -S git supervisor sudo base-devel git go --noconfirm
+pacman -S git supervisor sudo base-devel git go binutils --noconfirm --needed
 
 # adding 'nobody' to primary group 'users'
 usermod -g users nobody
@@ -109,7 +109,7 @@ su nobody -c "git clone https://aur.archlinux.org/yay.git /home/nobody/yay && cd
 pacman -U /home/nobody/yay/yay-${yay_version}-x86_64.pkg.tar.zst --noconfirm
 
 # remove base devel excluding useful core packages
-pacman -Ru $(pacman -Qgq base-devel | grep -v awk | grep -v pacman | grep -v sed | grep -v grep | grep -v gzip | grep -v which | grep -v fakeroot) --noconfirm
+pacman -Ru $(pacman -Qgq base-devel | grep -v awk | grep -v pacman | grep -v sed | grep -v grep | grep -v gzip | grep -v which | grep -v fakeroot | grep -v sudo | grep -v binutils) --noconfirm
 
 # general cleanup to shrink image size
 yes|pacman -Scc
