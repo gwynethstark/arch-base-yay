@@ -10,8 +10,6 @@ ADD build/*.conf /etc/supervisor.conf
 # adding install script
 ADD build/*.sh /root/
 
-RUN pacman -Q glibc
-
 # installation
 RUN chmod +x /root/*.sh && /bin/bash /root/install.sh
 
