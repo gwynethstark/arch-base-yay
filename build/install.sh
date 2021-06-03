@@ -108,6 +108,13 @@ su nobody -c "git clone https://aur.archlinux.org/yay.git /home/nobody/yay && cd
 # install yay as root
 pacman -U /home/nobody/yay/yay-${yay_version}-x86_64.pkg.tar.zst --noconfirm
 
+# find latest tini release tag from github
+curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o "/tmp/tini_release_tag" -L "https://github.com/krallin/tini/releases"
+tini_release_tag=$(cat /tmp/tini_release_tag | grep -P -o -m 1 '(?<=/krallin/tini/releases/tag/)[^"]+')
+
+# download tini, used to do graceful exit when docker stop issued and correct reaping of zombie processes.
+curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o "/usr/bin/tini" -L "https://github.com/krallin/tini/releases/download/${tini_release_tag}/tini-amd64" && chmod +x "/usr/bin/tini"
+
 # remove base devel excluding useful core packages
 pacman -Ru $(pacman -Qgq base-devel | grep -v awk | grep -v pacman | grep -v sed | grep -v grep | grep -v gzip | grep -v which | grep -v fakeroot | grep -v sudo | grep -v binutils) --noconfirm
 
